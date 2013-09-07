@@ -74,7 +74,7 @@ def main(argv):
       argstring+=" " + xrootfile 
       if filecount%filesperjob==0:
         print myexecutable + " " + argstring
-        argstring='-inputfilelist '
+        argstring='-inputfilelist'
       filecount+=1
   else:
     print "Um... We didn't get any files in our list..."
