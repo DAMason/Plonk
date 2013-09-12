@@ -30,7 +30,7 @@ from StageOutStringMaker import StageOutStringMaker
 
 def main(argv):
   xrootdlist=''                            # the list of root files to suck in 
-  myexecutable='CrapExe'                   # the name of the executable going to run 
+  myexecutable='bin/CrapExe'               # the name of the executable going to run 
   filesperjob=1                            # number of files out of xrootdlist to drop into each job.
   
   executablefilelistargument=' -inputfilelist '            # the argument the thing uses to identify its list of input files
