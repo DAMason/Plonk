@@ -8,6 +8,7 @@ import random
 class JDLmaker:
   
   def __init__(self):
+      self.Sandbox='sandbox.tgz'
       self.jdldic={
                    'universe':'globus',
                    'grid_resource':'gt2 red.unl.edu:2119/jobmanager-condor',
@@ -50,9 +51,11 @@ class JDLmaker:
         jdlout=open(jdlfilename,'w')  
       for j in self.jdldic.keys():
         jdlout.write("%s = %s\n" % (j,self.jdldic[j])) 
-      jdlout.close()       
+      if (not jdlfilename.lower()=='stdout'): 
+        jdlout.close()       
     except:
       print "somehow couldn't open %s for writing..." % jdlfilename
+      raise
 
 
 # set the CE we submit to through a list -- randomly select if there's more than one...
