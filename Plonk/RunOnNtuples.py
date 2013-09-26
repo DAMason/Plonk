@@ -4,7 +4,7 @@
 # will need to deal with environment, etc.  Probably scram things up with some random release just 
 # to get the root env, etc.
 
-import sys,getopt,os
+import sys,os,getopt
 from JDLmaker import JDLmaker
 from ExeMaker import ExeMaker
 from StageOutStringMaker import StageOutStringMaker
@@ -30,24 +30,34 @@ from StageOutStringMaker import StageOutStringMaker
 
 def main(argv):
   xrootdlist=''                            # the list of root files to suck in 
-  myexecutable='bin/CrapExe'               # the name of the executable going to run 
+  myexecutable='CrapExe'                   # the name of the executable going to run 
   filesperjob=1                            # number of files out of xrootdlist to drop into each job.
   
   executablefilelistargument=' -inputfilelist '            # the argument the thing uses to identify its list of input files
   executableOtherArguments=' -analysis Pho -printinterval 100 -copyevents -processevents -1 '              # a text string with the rest of the arguments that get passed to myexecutable
-  
+ 
+
+  helpmsg="""
+RunOnNtuples --xrootdlist=<file with xrootd URLs>
+             --filesperjob=#
+             --outputname=<text string base for output files>
+             --analysis=Pho|LL (default Pho)
+             --sandbox=<sandbox path>
+             --help (this msg)
+"""
+ 
   outputname='test'
   analysis='Pho'
   sandbox='sandbox.tgz'
-  
+  print "args are: "
+  for arg in argv:
+    print arg  
   try:
-    opts,args=getopt.getopt(argv,"",["xrootdlist=","filesperjob=","outputname=","analysis="])
-  except getopt.GetoptError:
-    print 'RunOnNtuples --xrootdlist=<file with xrootd URLs>'
-    print '             --filesperjob=#'
-    print '             --outputname=<text string base for output files>'
-    print '             --analysis=Pho|LL (default Pho)'
-    print '             --sandbox=<sandbox path>'
+    opts,args=getopt.getopt(argv,"",["xrootdlist=","filesperjob=","outputname=","analysis=","sandbox=","help"])
+  except getopt.GetoptError as err:
+    print str(err)
+    print helpmsg
+    sys.exit(1)
 
   for opt,arg in opts:
     if opt == '--xrootdlist':
@@ -60,6 +70,9 @@ def main(argv):
       analysis=arg
     elif opt == '--sandbox':
       sandbox=arg
+    else:
+      print helpmsg
+      sys.exit(0)
       
   # lets do some checks first...
     
@@ -105,11 +118,13 @@ def main(argv):
     thisjobexe.TheRestOfIt=''
 
     thisjobexe.TheRestOfIt+="ls -alt \n"
-    thisjobexe.TheRestOfIt+="export SCRAM_ARCH=slc5_amd64_gcc462 \n"
-    thisjobexe.TheRestOfIt+="scramv1 project CMSSW CMSSW_5_3_9 \n"
-    thisjobexe.TheRestOfIt+="mv %s CMSSW_5_3_9/src \n" % os.path.basename(sandbox)
-    thisjobexe.TheRestOfIt+="cd CMSSW_5_3_9/src \n"
+    thisjobexe.TheRestOfIt+="export SCRAM_ARCH=slc5_amd64_gcc472 \n"
+    thisjobexe.TheRestOfIt+="scramv1 project CMSSW CMSSW_6_2_1 \n"
+    thisjobexe.TheRestOfIt+="mv %s CMSSW_6_2_1/src \n" % os.path.basename(sandbox)
+    thisjobexe.TheRestOfIt+="cd CMSSW_6_2_1/src \n"
     thisjobexe.TheRestOfIt+="tar -xzvf %s \n" % os.path.basename(sandbox)
+    thisjobexe.TheRestOfIt+="eval `scramv1 runtime -sh`\n"
+    thisjobexe.TheRestOfIt+="export LD_LIBRARY_PATH=lib:$LD_LIBRARY_PATH\n"
     thisjobexe.TheRestOfIt+=crapexeline + "\n\n"
     
     # now we try to stage out all the results -- getting a generic stageout line
@@ -120,8 +135,8 @@ def main(argv):
     # Would certainly be easier if this was all python handled but not quite there yet...
     
     thisjobexe.TheRestOfIt+="for outfile in `ls *.root` ;\n"
-    thisjobexe.TheRestOfIt+=" do $fname=$outfile \n"
-    thisjobexe.TheRestOfIt+="    outsubbase=`echo fname|sed -e 's/_%s//g'|sed -e 's/\.root//g'` \n" % thisjobsbasename
+    thisjobexe.TheRestOfIt+=" do fname=$outfile \n"
+    thisjobexe.TheRestOfIt+="    outsubbase=`echo $fname|sed -e 's/_%s//g'|sed -e 's/\.root//g'` \n" % thisjobsbasename
     thisjobexe.TheRestOfIt+="    outfname=$outsubbase/$fname \n"
     
     genericstage=StageOutStringMaker()
