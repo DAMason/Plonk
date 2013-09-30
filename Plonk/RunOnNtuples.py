@@ -120,7 +120,7 @@ RunOnNtuples --xrootdlist=<file with xrootd URLs>
     thisjobexe.TheRestOfIt=''
 
     thisjobexe.TheRestOfIt+="ls -alt \n"
-    thisjobexe.TheRestOfIt+="mv x509up_u%i /tmp"
+    thisjobexe.TheRestOfIt+="mv x509up_u%i /tmp\n" % myuid
     thisjobexe.TheRestOfIt+="export SCRAM_ARCH=slc5_amd64_gcc472 \n"
     thisjobexe.TheRestOfIt+="scramv1 project CMSSW CMSSW_6_2_1 \n"
     thisjobexe.TheRestOfIt+="mv %s CMSSW_6_2_1/src \n" % os.path.basename(sandbox)
