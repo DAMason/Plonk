@@ -12,7 +12,7 @@ class JDLmaker:
       self.jdldic={
                    'universe':'globus',
                    'grid_resource':'gt2 red.unl.edu:2119/jobmanager-condor',
-                   'transfer_input_files':'YES',
+                   'transfer_input_files':'sandbox.tgz',
                    'should_transfer_files':'YES',
                    'notification':'NEVER',
                    'Executable':'/blah/blah',

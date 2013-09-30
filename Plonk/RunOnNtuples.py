@@ -9,6 +9,7 @@ from JDLmaker import JDLmaker
 from ExeMaker import ExeMaker
 from StageOutStringMaker import StageOutStringMaker
 
+
 # Just so we don't forget these ---
 #     cout << "Something is wonky with the command line args..." << endl;
 #     cout << "Usage: " << endl;
@@ -29,6 +30,7 @@ from StageOutStringMaker import StageOutStringMaker
 # MAIN IS HERE:
 
 def main(argv):
+  myuid=os.getuid()
   xrootdlist=''                            # the list of root files to suck in 
   myexecutable='CrapExe'                   # the name of the executable going to run 
   filesperjob=1                            # number of files out of xrootdlist to drop into each job.
@@ -154,7 +156,8 @@ RunOnNtuples --xrootdlist=<file with xrootd URLs>
     # Nwe write out the jdl for this job...
     
     thisjobjdl=JDLmaker()
-    thisjobjdl.jdldic['Sandbox']=sandbox
+    certloc="/tmp/x509up_u%i" % myuid
+    thisjobjdl.jdldic['transfer_input_files']="%s,%s" % (sandbox,certloc)
     thisjobjdl.jdldic['Executable']=thisjobexepath
     thisjobjdl.jdldic['Output']=os.path.join(MyNewPath,str(jobcounter)+".stdout")
     thisjobjdl.jdldic['Error']=os.path.join(MyNewPath,str(jobcounter)+".stderr")
