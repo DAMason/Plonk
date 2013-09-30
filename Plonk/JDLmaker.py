@@ -51,6 +51,7 @@ class JDLmaker:
         jdlout=open(jdlfilename,'w')  
       for j in self.jdldic.keys():
         jdlout.write("%s = %s\n" % (j,self.jdldic[j])) 
+      jdlout.write("queue")
       if (not jdlfilename.lower()=='stdout'): 
         jdlout.close()       
     except:

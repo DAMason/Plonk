@@ -6,7 +6,7 @@ class StageOutStringMaker:
     self.BaseCommand="lcg-cp -v -D srmv2 -b"
     self.InputPrefix="file:"
     self.InputFile="blork.root"
-    self.OutputURL="srm:/cmseos.fnal.gov:8443/srm/v2/server?SFN="
+    self.OutputURL="srm://cmseos.fnal.gov:8443/srm/v2/server?SFN="
     self.OutputBaseDir="/eos/uscms/store/user/lpcpjm/"
     self.OutputFile=self.InputFile
     
