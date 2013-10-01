@@ -1,5 +1,6 @@
 
 # Just constructs an lcg-cp or srmcp command string given some inputs.
+import os
 
 class StageOutStringMaker:
   def __init__(self):
@@ -12,7 +13,8 @@ class StageOutStringMaker:
     
   def constructCommand(self):
     
-    fullCommandString="%s \"%s%s\" \"%s%s%s\"" % (self.BaseCommand.strip(),self.InputPrefix.strip(),self.InputFile.strip(),self.OutputURL.strip(),self.OutputBaseDir.strip(),self.OutputFile.strip())
+    outputpath=os.path.join(self.OutputBaseDir.strip(),self.OutputFile.strip())
+    fullCommandString="%s \"%s%s\" \"%s%s\"" % (self.BaseCommand.strip(),self.InputPrefix.strip(),self.InputFile.strip(),self.OutputURL.strip(),outputpath)
     
     return fullCommandString
   
@@ -22,5 +24,5 @@ class StageOutStringMaker:
 if __name__=="__main__":
     bloopy=StageOutStringMaker()
     bloopy.InputFile="fuzzy.root"
-    bloopy.OutputBaseDir="/eos/uscms/store/user/lpcpjm/PrivateMC/gobbltygook/blomp/"
+    bloopy.OutputBaseDir="/eos/uscms/store/user/lpcpjm/PrivateMC/gobbltygook/blomp"
     print "%s" % bloopy.constructCommand()

@@ -149,7 +149,7 @@ RunOnNtuples --xrootdlist=<file with xrootd URLs>
     genericstage=StageOutStringMaker()
     genericstage.InputFile="$fname"
     genericstage.OutputFile="%s/$outfname" % outputname
-    genericstage.OutputBaseDir="/eos/uscms/store/user/%s" % stageoutbase
+    genericstage.OutputBaseDir=os.path.join("/eos/uscms/store/user/",stageoutbase)
     
     thisjobexe.TheRestOfIt+="    %s \n" % genericstage.constructCommand()
     thisjobexe.TheRestOfIt+=" done \n\n"
