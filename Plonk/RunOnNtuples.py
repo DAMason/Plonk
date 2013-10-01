@@ -37,6 +37,7 @@ def main(argv):
   
   executablefilelistargument=' -inputfilelist '            # the argument the thing uses to identify its list of input files
   executableOtherArguments=' -analysis Pho -printinterval 100 -copyevents -processevents -1 '              # a text string with the rest of the arguments that get passed to myexecutable
+  stageoutbase="lpcpjm/Plonk/Testing"
  
 
   helpmsg="""
@@ -45,6 +46,7 @@ RunOnNtuples --xrootdlist=<file with xrootd URLs>
              --outputname=<text string base for output files>
              --analysis=Pho|LL (default Pho)
              --sandbox=<sandbox path>
+             --stageoutbase=lpcpjm/Plonk/Testing
              --help (this msg)
 """
  
@@ -55,7 +57,7 @@ RunOnNtuples --xrootdlist=<file with xrootd URLs>
   for arg in argv:
     print arg  
   try:
-    opts,args=getopt.getopt(argv,"",["xrootdlist=","filesperjob=","outputname=","analysis=","sandbox=","help"])
+    opts,args=getopt.getopt(argv,"",["xrootdlist=","filesperjob=","outputname=","analysis=","sandbox=","stageoutbase=","help"])
   except getopt.GetoptError as err:
     print str(err)
     print helpmsg
@@ -72,6 +74,8 @@ RunOnNtuples --xrootdlist=<file with xrootd URLs>
       analysis=arg
     elif opt == '--sandbox':
       sandbox=arg
+    elif opt == '--stageoutbase':
+      stageoutbase=arg
     else:
       print helpmsg
       sys.exit(0)
@@ -145,6 +149,7 @@ RunOnNtuples --xrootdlist=<file with xrootd URLs>
     genericstage=StageOutStringMaker()
     genericstage.InputFile="$fname"
     genericstage.OutputFile="%s/$outfname" % outputname
+    genericstage.OutputBaseDir="/eos/uscms/store/user/%s" % stageoutbase
     
     thisjobexe.TheRestOfIt+="    %s \n" % genericstage.constructCommand()
     thisjobexe.TheRestOfIt+=" done \n\n"
