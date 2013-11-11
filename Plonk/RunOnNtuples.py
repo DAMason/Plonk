@@ -130,9 +130,10 @@ RunOnNtuples --xrootdlist=<file with xrootd URLs>
     thisjobexe.TheRestOfIt+="mv %s CMSSW_6_2_1/src \n" % os.path.basename(sandbox)
     thisjobexe.TheRestOfIt+="cd CMSSW_6_2_1/src \n"
     thisjobexe.TheRestOfIt+="tar -xzvf %s \n" % os.path.basename(sandbox)
-    thisjobexe.TheRestOfIt+="eval `scramv1 runtime -sh`\n"
-    thisjobexe.TheRestOfIt+="export LD_LIBRARY_PATH=lib:$LD_LIBRARY_PATH\n"
-    thisjobexe.TheRestOfIt+=crapexeline + "\n\n"
+ #   thisjobexe.TheRestOfIt+="eval `scramv1 runtime -sh`\n"
+ #   thisjobexe.TheRestOfIt+="export LD_LIBRARY_PATH=lib:$LD_LIBRARY_PATH\n"
+ #   thisjobexe.TheRestOfIt+=crapexeline + "\n\n"
+    thisjobexe.TheRestOfIt+="bash NtupleShell.sh " + crapexeline "\n\n"
     
     # now we try to stage out all the results -- getting a generic stageout line
     # the idea here is to construct something that catches all the root files that are found, but puts 
